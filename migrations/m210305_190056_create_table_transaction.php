@@ -14,16 +14,16 @@ class m210305_190056_create_table_transaction extends Migration
     {
         $this->createTable('transaction',[
             'id' => $this->primaryKey(),
-            'value' => $this->number(11, 2)->notNull(),
+            'value' => $this->decimal(11, 2)->notNull(),
             'payer' => $this->integer()->notNull(),
             'payee' => $this->integer()->notNull(),
             'status' => $this->integer()->notNull(),
-            'created_at' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
-            'updated_at' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
+            'created_at' => $this->integer(11),
+            'updated_at' => $this->integer(11),
          ]);
          $this->addForeignKey(
             'fk-transaction-payer',
-            'wallet',
+            'transaction',
             'payer',
             'user',
             'id',
@@ -31,7 +31,7 @@ class m210305_190056_create_table_transaction extends Migration
           );
          $this->addForeignKey(
             'fk-transaction-payee',
-            'wallet',
+            'transaction',
             'payee',
             'user',
             'id',

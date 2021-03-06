@@ -70,4 +70,3 @@ RUN a2enmod headers
 # COPY . /var/www
 # RUN ln -s public html
 EXPOSE 80
-ENTRYPOINT ["php-fpm"]

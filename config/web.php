@@ -9,30 +9,27 @@ $config = [
     'bootstrap' => ['log'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
     ],
     'components' => [
         'request' => [
             'enableCookieValidation'   => false,
             'enableCsrfValidation'     => false,
             'parsers'                  => [
-              'application/json' => 'yii\web\JsonParser',
+                'application/json' => 'yii\web\JsonParser',
             ]
-          ],
-          'response' => [
+        ],
+        'response' => [
             'format' => yii\web\Response::FORMAT_JSON,
             'charset' => 'UTF-8'
-          ],
-          'user' => [
-            'identityClass'   => 'app\modules\v0\models\Usuario',
+        ],
+        'user' => [
+            'identityClass'   => 'app\models\User',
             'enableSession'   => false,
             'loginUrl'        => null,
-          ],
-          // 'errorHandler' => [
-          //     'class' => '\bedezign\yii2\audit\components\web\ErrorHandler',
-          // ],
-          'db' => $db,
-          'urlManager' => [
+        ],
+        'db' => $db,
+        'urlManager' => [
             'enablePrettyUrl' => true,
             'enableStrictParsing' => true,
             'showScriptName' => false,
@@ -41,14 +38,13 @@ $config = [
                     'class'        => 'yii\rest\UrlRule', 
                     'prefix'       => 'api',
                     'controller'   => [
-                                      'transaction'                => 'transaction',
-                    ],
-                    'extraPatterns' =>  [
+                        'transaction' => 'transaction',
+                        'user' => 'user',
                     ],
                     'pluralize' => false,
                 ],
             ],
-          ]
+        ]
     ],
     'params' => $params,
 ];

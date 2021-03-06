@@ -15,12 +15,13 @@ class m210305_182717_create_table_user extends Migration
         $this->createTable('user',[
             'id' => $this->primaryKey(),
             'full_name' => $this->string(200)->notNull(),
-            'email' => $this->string(200)->notNull(),
+            'email' => $this->string(200)->notNull()->unique(),
             'password' => $this->string(200)->notNull(),
-            'token' => $this->string(200),
+            'token' => $this->string(200)->unique(),
+            'cpf_cnpj' => $this->string(14)->notNull()->unique(),
             'type' => $this->integer(),
-            'created_at' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
-            'updated_at' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
+            'created_at' => $this->integer(11),
+            'updated_at' => $this->integer(11),
          ]);
         
         $this->addCommentOnColumn('user', 'type', '1 => TYPE_STORE, 2 => TYPE_USER');
@@ -32,9 +33,9 @@ class m210305_182717_create_table_user extends Migration
         );
     
         $this->createIndex(
-            'idx_user_fullname',
+            'idx_user_full_name',
             'user',
-            'fullname'
+            'full_name'
         );
          
         $this->createIndex(

@@ -14,18 +14,17 @@ use yii\behaviors\TimestampBehavior;
  * @property string $email
  * @property string $password
  * @property string|null $token
- * @property string $cpf_cnpj
  * @property int|null $type 1 => TYPE_STORE, 2 => TYPE_USER
  * @property int|null $created_at
  * @property int|null $updated_at
  *
- * @property Transaction[] $transactionsPayer
- * @property Transaction[] $transactionsPayee
- * @property Wallet[] $wallets
+ * @property Transaction[] $transactions
+ * @property Transaction[] $transactions0
  */
 class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
-    /**
+
+     /**
      * {@inheritdoc}
      * constante para o usuario tipo lojista
      */
@@ -54,16 +53,16 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             TimestampBehavior::class,
         ];
     }
+
+    /**
+     * {@inheritdoc}
+     */
     public function rules()
     {
         return [
-            [['full_name', 'email', 'password', 'cpf_cnpj'], 'required'],
-            [['type', 'created_at', 'updated_at'], 'integer'],
+            [['full_name', 'email', 'password'], 'required'],
+            [['type'], 'integer'],
             [['full_name', 'email', 'password', 'token'], 'string', 'max' => 200],
-            [['cpf_cnpj'], 'string', 'max' => 14],
-            [['email'], 'unique'],
-            [['cpf_cnpj'], 'unique'],
-            [['token'], 'unique'],
         ];
     }
 
@@ -78,21 +77,19 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             'email' => Yii::t('app', 'Email'),
             'password' => Yii::t('app', 'Password'),
             'token' => Yii::t('app', 'Token'),
-            'cpf_cnpj' => Yii::t('app', 'Cpf Cnpj'),
             'type' => Yii::t('app', 'Type'),
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
         ];
     }
-    /**
+
+     /**
      * {@inheritdoc}
      */
-    public static function findIdentity($id)
-    {
+    public static function findIdentity($id){
         return static::findOne($id);
     }
-    public function getId()
-    {
+    public function getId(){
         return $this->id;
     }
 
@@ -106,27 +103,25 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return password_verify($password, $this->password );
     }
   
-    public function validateToken($token)
-    {
+    public function validateToken($token){
         return (trim($this->token) === trim($token));
     }
       
-    public function getAuthKey()
-    {
+    public function getAuthKey(){
         throw new NotSupportedException();
     }
 
-    public function validateAuthKey($authKey)
-    {
+    public function validateAuthKey($authKey){
         throw new NotSupportedException();
     }
+
 
     /**
      * Gets query for [[Transactions]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getTransactionsPayee()
+    public function getTransactions()
     {
         return $this->hasMany(Transaction::class, ['payee' => 'id']);
     }
@@ -136,52 +131,8 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getTransactionsPayer()
+    public function getTransactions0()
     {
         return $this->hasMany(Transaction::class, ['payer' => 'id']);
-    }
-
-    /**
-     * Gets query for [[Wallets]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getWallet()
-    {
-        return $this->hasOne(Wallet::class, ['user_id' => 'id']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function extraFields()
-    {
-        return ['wallet'];
-    }
-
-     /**
-     * {@inheritdoc}
-     */
-    public function fields() {
-        return [
-            'id',
-            'full_name',
-            'cpf_cnpj',
-            'email',
-            'type',
-            'typeString' => function($model) {
-                $reponse = "";
-                if ($this->type === $this::TYPE_STORE) {
-                    $response = 'TYPE_STORE';
-                }
-                if ($this->type === $this::TYPE_USER) {
-                    $response = 'TYPE_USER';
-                }
-                return $response;
-            },
-            'wallet',
-            'created_at',
-            'updated_at',
-        ];
     }
 }

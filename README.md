@@ -1,0 +1,1 @@
+php yii gii/model --tableName='user' modelClass='User' --enableI18N=1
