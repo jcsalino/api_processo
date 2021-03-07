@@ -1,19 +1,30 @@
 <?php
 
-namespace app\controllers;
- 
+namespace app\modules\security\controllers;
+
+use Yii;
 use yii\web\Response;
 use yii\rest\ActiveController;
-use yii\filters\ContentNegotiator;
+use yii\filters\ContentNegotiator;  
+use Lcobucci\Clock\SystemClock;
+use Lcobucci\JWT\Validation\Constraint\LooseValidAt;
+use Lcobucci\JWT\Validation\Constraint\SignedWith;
+use bizley\jwt\JwtHttpBearerAuth;
+use Lcobucci\JWT\Signer;
 
-
-
-
-
-class NoSecurity extends ActiveController
+class Security extends ActiveController
 {
+
     public function behaviors()
     {
+        Yii::$app->jwt->getConfiguration()
+        ->setValidationConstraints(
+            new LooseValidAt(SystemClock::fromSystemTimezone()),
+            new SignedWith(
+                Yii::$app->jwt->getConfiguration()->signer(),
+                Yii::$app->jwt->getConfiguration()->signingKey()
+            ),
+        );
         $behaviors = [
             [
                 'class' => ContentNegotiator::class,
@@ -34,6 +45,11 @@ class NoSecurity extends ActiveController
                 'Access-Control-Max-Age' => 3600,
             ]
         ];
+        $behaviors['authenticator'] = [
+            'class' => JwtHttpBearerAuth::class,
+            'except' => ['options'],
+        ];
         return  $behaviors;
     }
+
 }

@@ -1,17 +1,18 @@
 <?php
 
-namespace app\controllers;
+namespace app\modules\security\controllers;
  
 use yii\web\Response;
-use yii\rest\ActiveController;
+use yii\rest\Controller;
 use yii\filters\ContentNegotiator;
 
 
 
 
 
-class NoSecurity extends ActiveController
+class NoSecurity extends Controller
 {
+
     public function behaviors()
     {
         $behaviors = [

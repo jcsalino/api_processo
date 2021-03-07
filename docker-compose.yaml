@@ -3,13 +3,20 @@ version : '3'
 services:
     api:
         build: ./.docker/app/
-        container_name: api
-        entrypoint: dockerize -template ./.docker/httpd/apache2.conf:/etc/apache2/apache2.conf   -template ./.docker/app/db.php:/var/www/config/db.php  -wait tcp://db-api:3306 -timeout 40s ./.docker/entrypoint.sh
+        container_name: ${CONTAINER_API}
+        entrypoint: 'dockerize 
+            -template ./.docker/httpd/apache2.conf:/etc/apache2/apache2.conf 
+            -template ./.docker/app/db.php:/var/www/config/db.php
+            -template ./.docker/app/env.php:/var/www/config/env.php
+            -wait tcp://db-api:3306 -timeout 40s ./.docker/entrypoint.sh
+        '
         environment: 
             - DB_HOST=db-api
-            - DB_DATABASE=api
-            - DB_USERNAME=root
-            - DB_PASSWORD=root
+            - DB_DATABASE=${DB_DATABASE}
+            - DB_USERNAME=${DB_USERNAME}
+            - DB_PASSWORD=${DB_PASSWORD}
+            - JWT_SIGNER=${JWT_SIGNER}
+            - JWT_SIGNINGKEY=${JWT_SIGNINGKEY}
         volumes: 
             - .:/var/www
         networks:
@@ -17,29 +24,29 @@ services:
         depends_on:
             - db-api
         ports:
-            - "8090:80"
+            - ${PORTS_API}
     db-api:
         image: mysql:5.7
         command: --innodb-use-native-aio=0
-        container_name: db-api
+        container_name: ${CONTAINER_DB}
         restart: always
         tty: true
         ports: 
-            - "33006:3306"
+            - ${PORTS_DB}
         volumes:
             - ./.docker/dbdata:/var/lib/mysql
         environment: 
-            - MYSQL_DATABASE=api
-            - MYSQL_ROOT_PASSWORD=root
-            - MYSQL_USER=root
+            - MYSQL_DATABASE=${MYSQL_DATABASE}
+            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+            - MYSQL_USER=${MYSQL_USER}
         networks:
             - app-networks-api   
     adminer-api:
         image: adminer
-        container_name: adminer-api
+        container_name: ${CONTAINER_ADMINER}
         restart: always
         ports:
-            - 8008:8080 
+            - ${PORTS_ADMINER}
         networks:
             - app-networks-api   
             

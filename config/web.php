@@ -1,10 +1,16 @@
 <?php
 
+$env = require __DIR__ . '/env.php';
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
 $config = [
-    'id' => 'basic',
+    'id' => 'api-processo',
+    'modules' => [
+        'security' => [
+            'class' => 'app\modules\security\Module',
+        ],
+    ],
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'aliases' => [
@@ -12,10 +18,15 @@ $config = [
         '@npm' => '@vendor/npm-asset',
     ],
     'components' => [
+        'jwt' => [
+            'class' => \bizley\jwt\Jwt::class,
+            'signer' => $env['signer'], // Signer ID
+            'signingKey' => $env['signingKey'], // Secret key string or path to the signing key file
+        ],
         'request' => [
-            'enableCookieValidation'   => false,
-            'enableCsrfValidation'     => false,
-            'parsers'                  => [
+            'enableCookieValidation' => false,
+            'enableCsrfValidation' => false,
+            'parsers' => [
                 'application/json' => 'yii\web\JsonParser',
             ]
         ],
@@ -24,9 +35,9 @@ $config = [
             'charset' => 'UTF-8'
         ],
         'user' => [
-            'identityClass'   => 'app\models\User',
-            'enableSession'   => false,
-            'loginUrl'        => null,
+            'identityClass' => 'app\modules\security\models\User',
+            'enableSession' => false,
+            'loginUrl' => null,
         ],
         'db' => $db,
         'urlManager' => [
@@ -35,14 +46,28 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 [
-                    'class'        => 'yii\rest\UrlRule', 
-                    'prefix'       => 'api',
-                    'controller'   => [
+                    'class' => 'yii\rest\UrlRule', 
+                    'prefix' => 'api',
+                    'controller' => [
                         'transaction' => 'transaction',
                         'user' => 'user',
                     ],
                     'pluralize' => false,
                 ],
+                [
+                    'class' => 'yii\rest\UrlRule', 
+                    'prefix' => 'security',
+                    'controller' => [
+                        'noauth' => 'security/no-auth',
+                        'transaction' => 'security/transaction',
+                        'user' => 'security/user',
+                    ],
+                    'extraPatterns' =>  [
+                        'POST login' => 'login',
+                        'OPTIONS <action>' => 'options'
+                    ],
+                    'pluralize' => false,
+                ], 
             ],
         ]
     ],
