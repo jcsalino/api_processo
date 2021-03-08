@@ -35,7 +35,7 @@ class TransactionController extends Security
             if ($transaction->hasErrors()) {
                 return $transaction;
             }
-            $transaction->userPayer->wallet->withdrawn((float)$transaction->value);
+            $transaction->userPayer->wallet->withdraw((float)$transaction->value);
             $transaction->userPayee->wallet->deposit((float)$transaction->value);
             $transaction->save();
             $transactionDB->commit();

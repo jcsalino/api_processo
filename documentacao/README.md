@@ -118,14 +118,14 @@ Modelo que representa a tabela user. Para os modules commom e o nodbt ele só se
 Já no module security o mesmo tem outras funções como o generateToken, que é uma funcao para gerar o token JWT, além de sua autenticação.
 
 #### **Model Wallet**
-Modelo que representa a tabela wallet. Para os modules commom, security e nodbt a Wallet funciona praticamente igual, tendo as funções deposit e withdrawn.
+Modelo que representa a tabela wallet. Para os modules commom, security e nodbt a Wallet funciona praticamente igual, tendo as funções deposit e withdraw.
 
 A função deposit funciona quando o valor é depositado na wallet de outro usuário e dentro dela que é realizado a notificação que o valor foi recebido.
 
-A função withdrawn funciona quando o valor é retirado para ser transferido e é nessa função que a api manda uma requisição para saber se está autorizado ou não.
+A função withdraw funciona quando o valor é retirado para ser transferido e é nessa função que a api manda uma requisição para saber se está autorizado ou não.
 
 
-O Module nodbt tem mais duas funções que são o revertDeposit e revertWithdrawn que servem para fazer a reversão dos valores.
+O Module nodbt tem mais duas funções que são o revertDeposit e revertWithdraw que servem para fazer a reversão dos valores.
 
 
 

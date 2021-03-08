@@ -33,8 +33,8 @@ class TransactionController extends NoSecurity
             if ($transaction->hasErrors()) {
                 return $transaction;
             }
-            $transaction->userPayer->wallet->withdrawn((float)$transaction->value);
-            $transaction->withdrawn = true;
+            $transaction->userPayer->wallet->withdraw((float)$transaction->value);
+            $transaction->withdraw = true;
             $transaction->userPayee->wallet->deposit((float)$transaction->value);
             $transaction->deposit = true;
             $transaction->save();
@@ -42,8 +42,8 @@ class TransactionController extends NoSecurity
             if ($transaction->deposit) {
                 $transaction->userPayee->wallet->revertDeposit((float)$transaction->value);
             }
-            if ($transaction->withdrawn) {
-                $transaction->userPayer->wallet->revertWithdrawn((float)$transaction->value);
+            if ($transaction->withdraw) {
+                $transaction->userPayer->wallet->revertWithdraw((float)$transaction->value);
             }
             $transaction->status = 9;
             $transaction->save();

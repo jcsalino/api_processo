@@ -2,9 +2,9 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=db-api;dbname=api_test',
-    'username' => 'root',
-    'password' => 'root',
+    'dsn' => 'mysql:host={{.Env.DB_HOST}};dbname=api_test',
+    'username' => '{{.Env.DB_USERNAME}}',
+    'password' => '{{.Env.DB_PASSWORD}}',
     'charset' => 'utf8',
 
     // Schema cache options (for production environment)

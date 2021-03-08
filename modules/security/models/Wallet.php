@@ -81,7 +81,7 @@ class Wallet extends \yii\db\ActiveRecord
      *  funcao para retirada de dinheiro da carteira.
      * @return boolean
      */
-    public function withdrawn(float $value) {
+    public function withdraw(float $value) {
         if ($this->balance < $value) {
             throw new BadRequestHttpException("The payer's balance is not sufficient for this transaction");
         }

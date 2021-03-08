@@ -22,7 +22,7 @@ class Transaction extends \yii\db\ActiveRecord
 {
 
     public bool $deposit = false;
-    public bool $withdrawn = false;
+    public bool $withdraw = false;
 
     /**
      * {@inheritdoc}

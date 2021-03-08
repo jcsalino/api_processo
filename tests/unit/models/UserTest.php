@@ -2,43 +2,42 @@
 
 namespace tests\unit\models;
 
-use app\models\User;
-
+use Yii;
+use app\modules\security\models\User;
+use Lcobucci\Clock\SystemClock;
+use Lcobucci\JWT\Validation\Constraint\LooseValidAt;
+use Lcobucci\JWT\Validation\Constraint\SignedWith;
 class UserTest extends \Codeception\Test\Unit
 {
     public function testFindUserById()
     {
-        expect_that($user = User::findIdentity(100));
-        expect($user->username)->equals('admin');
+        expect_that($user = User::findIdentity(1));
+        expect($user->email)->equals('user1@apiprocesso.teste');
 
         expect_not(User::findIdentity(999));
+    }
+    public function testFindUserByEmail()
+    {
+        expect_that($user = User::findByEmail('user1@apiprocesso.teste'));
+        expect_not(User::findByEmail('not-admin'));
     }
 
     public function testFindUserByAccessToken()
     {
-        expect_that($user = User::findIdentityByAccessToken('100-token'));
-        expect($user->username)->equals('admin');
+        Yii::$app->jwt->getConfiguration()
+        ->setValidationConstraints(
+            new LooseValidAt(SystemClock::fromSystemTimezone()),
+            new SignedWith(
+                Yii::$app->jwt->getConfiguration()->signer(),
+                Yii::$app->jwt->getConfiguration()->signingKey()
+            ),
+        );
+        $user1 = User::findIdentity(1);
+        $token = $user1->generateToken(); 
+        expect_that($user = User::findIdentityByAccessToken($token));
+        expect($user->email)->equals('user1@apiprocesso.teste');
 
-        expect_not(User::findIdentityByAccessToken('non-existing'));        
-    }
-
-    public function testFindUserByUsername()
-    {
-        expect_that($user = User::findByUsername('admin'));
-        expect_not(User::findByUsername('not-admin'));
-    }
-
-    /**
-     * @depends testFindUserByUsername
-     */
-    public function testValidateUser($user)
-    {
-        $user = User::findByUsername('admin');
-        expect_that($user->validateAuthKey('test100key'));
-        expect_not($user->validateAuthKey('test102key'));
-
-        expect_that($user->validatePassword('admin'));
-        expect_not($user->validatePassword('123456'));        
+        expect_not(User::findIdentityByAccessToken('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI0ZjFnMjNhMTJhYSIsImlhdCI6IjE2MTUxNzc4MTAuNzM5NDUzIiwibmJmIjoiMTYxNTE3NzgxMC43Mzk0NTMiLCJleHAiOiIxNjE1MjY0MjEwLjczOTQ1MyIsInRva2VuIjoiZjBkZTU3MmZjNDkxMTQwMTUzNjM2ZDA0NDk2YjlmYmYifQ.pQiSWVdFltfeOt8NrynTd_9Hiclp8H-Fgck7SpdcjZk'));        
     }
 
 }

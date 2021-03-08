@@ -10,5 +10,9 @@ if [ ! -f "composer-install" ]; then
    echo "composer-install" > composer-install
 fi
 php yii migrate --interactive=0
+php createDbTest.php
+cd tests/bin
+php yii migrate --interactive=0
+php yii migrate --migrationPath=@app/migrations/seed_test/ --interactive=0
 source /etc/apache2/envvars
 exec apache2 -D FOREGROUND

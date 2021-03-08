@@ -46,3 +46,4 @@ composer-install
 composer.lock
 config/env.php
 .env
+config/test_db.php

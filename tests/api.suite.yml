@@ -1,0 +1,10 @@
+class_name: ApiTester
+modules:
+    enabled:
+        - REST:
+            url: /security
+            depends: Yii2
+            part: Json
+        - \Helper\Api
+    config:
+        - Yii2
