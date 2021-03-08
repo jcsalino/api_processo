@@ -21,27 +21,27 @@ Foi utilizado o framework YII2 para a construção da API REST. Os modelos utili
   
 Estrutura de Diretorios
 -------------------
-Temos a estrutura basica do YII2 e eu vou dar uma explicada rapida em cada diretorio.
-.docker/
-nesse diretorio ficam os arquivos referentes ao docker, tera uma sessao para explicar sobre o uso do docker nesse projeto.
-commands/
-diretorios referentes ao comandos, geralmente algo que sera executado pelo cron similar aos jobs do laravel
-config/
-diretorio com os aquivos referentes as configuracoes do framework, um arquivo em especifico o web.php contem todas as configuracoes mais as rotas das apis.
-controllers/
-diretorio com as classes referentes aos controllers
-documentacao/
-diretorio com arquivos referente a documentacao do sistema.
-migrations/
-diretorio com as classes de migrations, para versionamento do banco em codigo.
-models/
-diretorio com as classes referentes aos modelos.
-modules/
-diretorio com os modules, cada modulo possui seus diretorios de models e controllers 
-tests/
-diretorio para as classes de testes
-web/
-diretorio similar ao public do laravel, onde fica o apontamento e carrega as classes do framework.
+Temos a estrutura basica do YII2 e eu vou dar uma explicada rapida em cada diretorio.<br>
+.docker/ <br>
+nesse diretorio ficam os arquivos referentes ao docker, tera uma sessao para explicar sobre o uso do docker nesse projeto.<br>
+commands/ <br>
+diretorios referentes ao comandos, geralmente algo que sera executado pelo cron similar aos jobs do laravel<br>
+config/ <br>
+diretorio com os aquivos referentes as configuracoes do framework, um arquivo em especifico o web.php contem todas as configuracoes mais as rotas das apis.<br>
+controllers/ <br>
+diretorio com as classes referentes aos controllers<br>
+documentacao/ <br>
+diretorio com arquivos referente a documentacao do sistema.<br>
+migrations/ <br>
+diretorio com as classes de migrations, para versionamento do banco em codigo.<br>
+models/ <br>
+diretorio com as classes referentes aos modelos.<br>
+modules/ <br>
+diretorio com os modules, cada modulo possui seus diretorios de models e controllers <br>
+tests/ <br>
+diretorio para as classes de testes<br>
+web/ <br>
+diretorio similar ao public do laravel, onde fica o apontamento e carrega as classes do framework.<br>
 
 
 Estrutura do Projeto
