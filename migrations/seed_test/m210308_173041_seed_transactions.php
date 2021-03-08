@@ -4,9 +4,9 @@ use app\models\User;
 use yii\db\Migration;
 
 /**
- * Class m210306_131921_seed_user_and_wallet
+ * Class m210308_173041_seed_transactions
  */
-class m210306_131921_seed_user_and_wallet extends Migration
+class m210308_173041_seed_transactions extends Migration
 {
     /**
      * {@inheritdoc}
@@ -18,6 +18,7 @@ class m210306_131921_seed_user_and_wallet extends Migration
             'value' => 1,
             'payer' => 2,
             'payee' => 1,
+            'status' => 1,
             'created_at' => time(),
             'updated_at' => time(),
         ]);
@@ -26,6 +27,7 @@ class m210306_131921_seed_user_and_wallet extends Migration
             'value' => 1,
             'payer' => 3,
             'payee' => 1,
+            'status' => 1,
             'created_at' => time(),
             'updated_at' => time(),
         ]);
@@ -36,7 +38,7 @@ class m210306_131921_seed_user_and_wallet extends Migration
      */
     public function safeDown()
     {
-        echo "m210306_131921_seed_user_and_wallet cannot be reverted.\n";
+        echo "m210308_173041_seed_transactions cannot be reverted.\n";
 
         return false;
     }
@@ -50,7 +52,7 @@ class m210306_131921_seed_user_and_wallet extends Migration
 
     public function down()
     {
-        echo "m210306_131921_seed_user_and_wallet cannot be reverted.\n";
+        echo "m210308_173041_seed_transactions cannot be reverted.\n";
 
         return false;
     }

@@ -2,11 +2,19 @@
 
 class UserApiCest
 {
-    public string $token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI0ZjFnMjNhMTJhYSIsImlhdCI6IjE2MTUyMzM5MDguNDI5ODcyIiwibmJmIjoiMTYxNTIzMzkwOC40Mjk4NzIiLCJleHAiOiIxNjE1MzIwMzA4LjQyOTg3MiIsInRva2VuIjoiMTFmN2M2YmRhNWNhZDM1ZjkwMDFiOGEyMThlODJjZTEifQ.DFg3e4pW-bynay3i5VhNTAaU65kuFCfiKCOGF4awu6s";
     public function list(ApiTester $I)
     {
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->amBearerAuthenticated($this->token);
+        $I->sendPost('/noauth/login', [
+          'password' => 'teste', 
+          'email' => 'user2@apiprocesso.teste'
+        ]);
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
+        $I->seeResponseIsJson();
+        $token = $I->grabDataFromResponseByJsonPath('$.data.token');
+
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->amBearerAuthenticated($token[0]);
         $I->sendGet('/user');
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->seeResponseIsJson();
@@ -18,7 +26,16 @@ class UserApiCest
     public function view(ApiTester $I)
     {
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->amBearerAuthenticated($this->token);
+        $I->sendPost('/noauth/login', [
+          'password' => 'teste', 
+          'email' => 'user2@apiprocesso.teste'
+        ]);
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
+        $I->seeResponseIsJson();
+        $token = $I->grabDataFromResponseByJsonPath('$.data.token');
+
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->amBearerAuthenticated($token[0]);
         $I->sendGet('/user/2');
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->seeResponseIsJson();
@@ -43,7 +60,16 @@ class UserApiCest
     public function viewNotYourId(ApiTester $I)
     {
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->amBearerAuthenticated($this->token);
+        $I->sendPost('/noauth/login', [
+          'password' => 'teste', 
+          'email' => 'user2@apiprocesso.teste'
+        ]);
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
+        $I->seeResponseIsJson();
+        $token = $I->grabDataFromResponseByJsonPath('$.data.token');
+
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->amBearerAuthenticated($token[0]);
         $I->sendGet('/user/1');
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->seeResponseIsJson();
