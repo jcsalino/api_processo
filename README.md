@@ -5,8 +5,8 @@
 </p>
 
 ## Framework
-Vou utilzar a mesma esplicação que utilizei no meu TCC XD.
-Foi utilizado o framework YII2 para a construção da API REST. Os modelos utilizados são Active Records.
+Vou utilzar a mesma esplicação que utilizei no meu TCC XD.<br>
+Foi utilizado o framework YII2 para a construção da API REST. Os modelos utilizados são Active Records.<br>
 
 > O Active Record fornece uma interface orientada a objetos para acessar
 > e manipular dados armazenados em bancos de dados. Uma classe Active
@@ -51,7 +51,7 @@ Estrutura do Projeto
 ##### Todos os modelos nos 3 modulos semguem as tabelas pois todos sao active records
 #### Foi criado 3 modulos de api
 ##### chamadas / 
- usa a estrutura padrao do Yii2 tendo seus modelos em models e seus controles em controllers, a configuracao de roteamento esta em config/web.php na linha 46 toda a parte de urlManager é referente ao roteamento, essa api nao utiliza nenhum padrao de autenticação e seguranca, toda a transaction é realisada por transaction de banco de dados quando ocorre algum erro é realizado um rollback para desfazer todas as operacoes assim não guardando nenhuma informacao
+ usa a estrutura padrao do Yii2 tendo seus modelos em models e seus controles em controllers, a configuracao de roteamento esta em config/web.php na linha 46 toda a parte de urlManager é referente ao roteamento, essa api nao utiliza nenhum padrao de autenticação e seguranca, toda a transaction é realizada por transaction de banco de dados quando ocorre algum erro é realizado um rollback para desfazer todas as operacoes assim não guardando nenhuma informacao
 
 #### chamadas /security/
 Nessa api existe autenticacao via JWT outras implementacoes por exemplo o usuario só consegue ver sua propria wallet, e só consegue ver os valores de transactions que ele participou. possui o mesmo esquema de transaction de banco de dados
@@ -62,17 +62,22 @@ Nao possui autenticacao e a reversao ao ocorrer algum tipo de erro é realizada 
 documentação completa da api
 [https://documenter.getpostman.com/view/1908250/Tz5m6ygv](https://documenter.getpostman.com/view/1908250/Tz5m6ygv)
 
+##### Dados 
+como não foi criado a api para cadastro de usuarios, foi criado um migration para popular o banco com usuarios apra fins de teste. <br>
+Os usuario seguem a nomeclatura user1@apiprocesso.teste ... até user5@apiprocesso.teste os 3 primeiros sao usuarios comuns e os 2 ultimos são usuarios tipos de loja. <br>
+cada qual teve um valor especifico na wallet.<br>
+
 Estrutura Docker
 ---------------------
-O docker-compose foi separado em 3 containers diferentes um container para a api, um para o mysql e o ultimo com o adminer para acessar o banco com mais facilidade.
-existe um .env com as configuracoes necessarias para rodar o docker-compose.
-os arquivos referentes ao docker ficam no diretorio .docker/
-o mesmo possui 3 diretorios mais um arquivo de comando.
-diretorio app/ possui arquivos que seram subistituidos no yii2 sempre que rodar um compose up e possui o dockerfile com a configuracao docker da api.
-foi utilizado o dockerize para fazer essas subistituicoes.
-o diretorio dbdata é o responsavel peloas arquivos de banco
-o diretorio httpd é aonde ficam as configuracoes do apache que o container da api utiliza
-e o arquivo entrypoint.sh é o entrypoint do container da api o mesmo instala os arquivos do compose caso não nao esteja instalado.
+O docker-compose foi separado em 3 containers diferentes um container para a api, um para o mysql e o ultimo com o adminer para acessar o banco com mais facilidade.<br>
+existe um .env com as configuracoes necessarias para rodar o docker-compose.<br>
+os arquivos referentes ao docker ficam no diretorio .docker/<br>
+o mesmo possui 3 diretorios mais um arquivo de comando.<br>
+diretorio app/ possui arquivos que seram subistituidos no yii2 sempre que rodar um compose up e possui o dockerfile com a configuracao docker da api.<br>
+foi utilizado o dockerize para fazer essas subistituicoes.<br>
+o diretorio dbdata é o responsavel peloas arquivos de banco<br>
+o diretorio httpd é aonde ficam as configuracoes do apache que o container da api utiliza<br>
+e o arquivo entrypoint.sh é o entrypoint do container da api o mesmo instala os arquivos do compose caso não nao esteja instalado.<br>
 
 O que é necessario para rodar ?
 ---------------------
