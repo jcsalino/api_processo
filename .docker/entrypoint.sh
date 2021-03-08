@@ -9,6 +9,6 @@ if [ ! -f "composer-install" ]; then
    composer install -vvv
    echo "composer-install" > composer-install
 fi
-php yii migrate --interactive
+php yii migrate --interactive=0
 source /etc/apache2/envvars
 exec apache2 -D FOREGROUND
