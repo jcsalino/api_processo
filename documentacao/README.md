@@ -16,9 +16,9 @@ Foi utilizado o framework YII2 para a construção da API REST. Os modelos utili
 > manipular os dados armazenados nas tabelas do banco de dados (YII,
 > acesso em outubro de 2018).
 
-  
-Estrutura de Diretorios
--------------------
+ -----
+
+## Estrutura de Diretorios
 Temos a estrutura basica do YII2 e eu vou dar uma explicada rapida em cada diretorio.
 
 
@@ -82,11 +82,16 @@ Temos a estrutura basica do YII2 e eu vou dar uma explicada rapida em cada diret
 │ 
 │ 
 └───tests
+│   │
+│   └───api (diretorio com os testes da api security)
+│   │
+│   └───unit (diretorio com os testes unitarios)
 │ 
 │ 
 └───web (similar ao public do laravel, onde fica o apontamento e carrega as classes do framework)
 ```
 
+-----
 
 Estrutura do Projeto
 -------------------
@@ -158,10 +163,20 @@ Os usuários seguem a nomeclatura user1@apiprocesso.teste ... até user5@apiproc
 
 Cada qual teve um valor específico na wallet.
 
+-----
+## Estrutura Testes
+
+**Foi criado testes unitarios para os models: User do module security, Wallet do module nodbt**
+
+**Foi criado testes funcionais para a api security**
 
 
-Estrutura Docker
----------------------
+**para rodar os testes basta acessar o container e rodar o comando:**
+```
+./vendor/bin/codecept run
+```
+-----
+## Estrutura Docker
 O docker-compose foi separado em 3 containers diferentes: um container para a api, um para o mysql e o último com o adminer para acessar o banco com mais facilidade.
 
 Existe um .env com as configurações necessárias para rodar o docker-compose.
