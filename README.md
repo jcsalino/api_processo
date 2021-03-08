@@ -59,8 +59,21 @@ Nessa api existe autenticacao via JWT outras implementacoes por exemplo o usuari
 #### chamadas /nodbt/
 Nao possui autenticacao e a reversao ao ocorrer algum tipo de erro é realizada sem transaction de banco de dados.
 
-documentação completa da api
+documentação da api com suas chamadas e exemplos
 [https://documenter.getpostman.com/view/1908250/Tz5m6ygv](https://documenter.getpostman.com/view/1908250/Tz5m6ygv)
+
+#### Model User
+Modelo que representa a tabela user, para os modules commom e o nodbt ele só serve para trazer os dados, não foi implementado nada mais além das regras basicas e os filds que deve trazer nas consultas.<br>
+Já no module security o mesmo tem outras funcoes como o generateToken, que é uma funcao para gerar o token JWT, além de sua authenticacao
+
+#### Model Wallet
+Modelo que representa a tabela wallet, para os modules commom, security e nodbt a Wallet funciona praticamente igual tendo as funcoes deposit e withdrawn.<br>
+A funçao deposit funciona quando o valor é depositado na wallet de outro ususario e dentro dela que é realizado a notificacao que o valor foi recebido.<br>
+A função withdrawn funciona quando o valor é retirado para ser transferido e é nessa função que a api manda uma requisição para saber se está autorizado ou não.<br>
+O Module nodbt tem mais duas funções que são o revertDeposit e revertWithdrawn que servem para fazer a reversão dos valores. <br>
+
+#### Model Transaction
+Modelo que representa a tabela transaction, para os modules commom, security e nodbt a transaction é igual. Sendo responsavel por todas as regras de validação exceto a verificação de autorização no serviço de terceiros.
 
 ##### Dados 
 como não foi criado a api para cadastro de usuarios, foi criado um migration para popular o banco com usuarios apra fins de teste. <br>
