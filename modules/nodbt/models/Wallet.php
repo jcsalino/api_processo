@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\modules\nodbt\models;
 
 use Yii;
 use yii\httpclient\Client;
@@ -81,7 +81,8 @@ class Wallet extends \yii\db\ActiveRecord
      *  funcao para retirada de dinheiro da carteira.
      * @return boolean
      */
-    public function withdrawn(float $value) {
+    public function withdrawn(float $value): void 
+    {
         if ($this->balance < $value) {
             throw new BadRequestHttpException("The payer's balance is not sufficient for this transaction");
         }
@@ -94,6 +95,21 @@ class Wallet extends \yii\db\ActiveRecord
         $this->balance -= $value;
         $this->save();
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     *  funcao para reverter a retirada de dinheiro da carteira.
+     * @return boolean
+     */
+    public function revertWithdrawn(float $value): void 
+    {
+        $this->balance += $value;
+        /**
+         * criar nova notificacao
+         */
+        $this->save();
+    }
     
     /**
      * {@inheritdoc}
@@ -101,17 +117,33 @@ class Wallet extends \yii\db\ActiveRecord
      *  funcao para deposito de dinheiro na carteira.
      * @return boolean
      */
-    public function deposit(float $value) {
+    public function deposit(float $value): void
+    {
         $this->balance += $value;
         $client = new Client();
         $response = $client->post('https://run.mocky.io/v3/b19f7b9f-9cbf-4fc6-ad22-dc30601aec04')->send();
         if (!$response->getIsOk()) {
             // podemos modificar a resposta e colocar a respota do autorizador em log.
             //throw new \yii\web\HttpException(422, $response->toString());
-             /**
+            /**
              * criar algum evento para reenviar a notificacao algo como uma fila
              */
         }
+        $this->save();
+    }
+    
+    /**
+     * {@inheritdoc}
+     *
+     *  funcao para reverter o deposito de dinheiro na carteira.
+     * @return boolean
+     */
+    public function revertDeposit(float $value): void
+    {
+        $this->balance -= $value;
+        /**
+         * criar nova notificacao
+         */
         $this->save();
     }
 

@@ -108,6 +108,9 @@ class Wallet extends \yii\db\ActiveRecord
         if (!$response->getIsOk()) {
             // podemos modificar a resposta e colocar a respota do autorizador em log.
             //throw new \yii\web\HttpException(422, $response->toString());
+             /**
+             * criar algum evento para reenviar a notificacao algo como uma fila
+             */
         }
         $this->save();
     }

@@ -10,6 +10,9 @@ $config = [
         'security' => [
             'class' => 'app\modules\security\Module',
         ],
+        'nodbt' => [
+            'class' => 'app\modules\nodbt\Module',
+        ],
     ],
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
@@ -47,7 +50,7 @@ $config = [
             'rules' => [
                 [
                     'class' => 'yii\rest\UrlRule', 
-                    'prefix' => 'api',
+                    'prefix' => '',
                     'controller' => [
                         'transaction' => 'transaction',
                         'user' => 'user',
@@ -61,6 +64,19 @@ $config = [
                         'noauth' => 'security/no-auth',
                         'transaction' => 'security/transaction',
                         'user' => 'security/user',
+                    ],
+                    'extraPatterns' =>  [
+                        'POST login' => 'login',
+                        'OPTIONS <action>' => 'options'
+                    ],
+                    'pluralize' => false,
+                ], 
+                [
+                    'class' => 'yii\rest\UrlRule', 
+                    'prefix' => 'nodbt',
+                    'controller' => [
+                        'transaction' => 'nodbt/transaction',
+                        'user' => 'nodbt/user',
                     ],
                     'extraPatterns' =>  [
                         'POST login' => 'login',
