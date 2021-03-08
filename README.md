@@ -75,6 +75,20 @@ O Module nodbt tem mais duas funções que são o revertDeposit e revertWithdraw
 #### Model Transaction
 Modelo que representa a tabela transaction, para os modules commom, security e nodbt a transaction é igual. Sendo responsavel por todas as regras de validação exceto a verificação de autorização no serviço de terceiros.
 
+#### Controller User
+Controller que representa as chamadas referente aos users, nos modules commom e nodbt funciona exatamente igual, trazendo todos os dados sem a necessidade de authenticação, já no module security é necessario um token e o
+usuario do token só pode ver os valores de sua propria wallet.
+
+#### Controller Transaction
+Controller que representa as chamadas referente as transactions.
+No module commom e nodbt as chamdas gets (list e view) trazem todos os valores sem nenhum criterio.<br>
+No module security as chamdas gets (list e view), necessario envio do token, só trazem todos os valores exceto o value da transaction caso o usuario não participou da mesma.<br>
+No module commom e security a chamda post (create), precisa dos dados descrito na documentação da api e caso ocorra uma incosistencia a mesma não é realizada por causa do rollback, a diferença entre o commom e security 
+é que no security o payer é sempre o usuario authenticado.
+No module nodbt é parecido com o do module commom a diferençã é que não tem rollback e a reversão é feita a partir de modificações na wallet.
+
+#### Controller Transaction
+
 ##### Dados 
 como não foi criado a api para cadastro de usuarios, foi criado um migration para popular o banco com usuarios apra fins de teste. <br>
 Os usuario seguem a nomeclatura user1@apiprocesso.teste ... até user5@apiprocesso.teste os 3 primeiros sao usuarios comuns e os 2 ultimos são usuarios tipos de loja. <br>
