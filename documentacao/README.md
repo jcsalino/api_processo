@@ -34,7 +34,7 @@ Temos a estrutura basica do YII2 e eu vou dar uma explicada rapida em cada diret
 └───commands (controllers que geralmente sao chamados por robos, similar aos jobs do laravel)
 │
 │
-└───config (aquivos referentes as configuracoes do framework)
+└───config (arquivos referentes as configuracoes do framework)
 │   │   web.php (principal arquivo de configuracao, para as entradas externas)
 │   │   console.php (principal arquivo de configuracao, para os commands)
 │  
@@ -53,9 +53,11 @@ Temos a estrutura basica do YII2 e eu vou dar uma explicada rapida em cada diret
 └─── migrations (versionamento do banco em codigo)
 │   | m210305_182717_create_table_user.php ( cria a tabela user)
 │   | m210305_190039_create_table_wallet.php ( cria a tabela wallet)
-│   | m210305_190056_create_table_transaction.php (cria a table transaction)
+│   | m210305_190056_create_table_transaction.php (cria a tabela transaction)
 │   | m210306_131921_seed_user_and_wallet.php (popula as tabelas user e wallet)
-│ 
+│   │
+│   └───seed_test
+│       │   m210308_173041_seed_transactions.php (seed para popular transaction para os tests)
 │ 
 └───models
 │   │ Transaction.php    
@@ -71,13 +73,18 @@ Temos a estrutura basica do YII2 e eu vou dar uma explicada rapida em cada diret
 │   │   └───controllers   
 │   │   │  
 │   │   └───models   
+│   │   │  
 │   │   │  Module.php
+│   │     
 │   └───security
 │       │   
 │       │  
 │       └───controllers   
 │       │  
+│       │  
 │       └───models   
+│       │  
+│       │  Module.php
 │   
 │ 
 │ 
@@ -102,28 +109,28 @@ Estrutura do Projeto
 #### **Todos os modelos nos 3 modulos seguem as tabelas pois todos sao active records**
 
 
-#### Foi criado 3 modulos de api
+#### Foram criados 3 modulos de api
 
 
 ##### chamadas: **/**
  Utiliza a estrutura padrão do Yii2, tendo seus modelos em models e seus controles em controllers. A configuração de roteamento está em config/web.php na linha 46, toda a parte de urlManager é referente ao roteamento. Essa api não utiliza nenhum padrão de autenticação e segurança. Toda a transaction é realizada por transaction de banco de dados logo, quando ocorre algum erro é realizado um rollback para desfazer todas as operações, assim não guardando nenhuma informação daquela transferência.
 
 #### chamadas: **/security/**
-Nessa api existe autenticacao via JWT e outras implementações. Por exemplo, o usuario só consegue ver sua propria wallet, e só consegue ver os valores de transactions que ele participou. Possui o mesmo esquema de transaction de banco de dados.
+Nessa api existe autenticação via JWT e outras implementações. Por exemplo, o usuario só consegue ver sua propria wallet, e só consegue ver o campo value de transactions que ele participou. Possui o mesmo esquema de transaction de banco de dados.
 
 #### chamadas: **/nodbt/**
 Não possui autenticação, e a reversão ao ocorrer algum tipo de erro é realizada sem transaction de banco de dados.
 
-Documentação da api:
+**Documentação da api:** 
 [Postman](https://documenter.getpostman.com/view/1908250/Tz5m6ygv)
 
 #### **Model User**
-Modelo que representa a tabela user. Para os modules commom e o nodbt ele só serve para trazer os dados, não foi implementado nada mais além das regras básicas e os fields que deve trazer nas consultas.
+Modelo que representa a tabela user. Para os modules common e o nodbt ele só serve para trazer os dados, não foi implementado nada mais além das regras básicas e os fields que deve trazer nas consultas.
 
 Já no module security o mesmo tem outras funções como o generateToken, que é uma funcao para gerar o token JWT, além de sua autenticação.
 
 #### **Model Wallet**
-Modelo que representa a tabela wallet. Para os modules commom, security e nodbt a Wallet funciona praticamente igual, tendo as funções deposit e withdraw.
+Modelo que representa a tabela wallet. Para os modules common, security e nodbt a Wallet funciona praticamente igual, tendo as funções deposit e withdraw.
 
 A função deposit funciona quando o valor é depositado na wallet de outro usuário e dentro dela que é realizado a notificação que o valor foi recebido.
 
@@ -135,28 +142,28 @@ O Module nodbt tem mais duas funções que são o revertDeposit e revertWithdraw
 
 
 #### **Model Transaction**
-Modelo que representa a tabela transaction. Para os modules commom, security e nodbt a transaction é igual. É responsável por todas as regras de validação exceto a verificação de autorização no serviço de terceiros.
+Modelo que representa a tabela transaction. Para os modules common, security e nodbt a transaction é igual. É responsável por todas as regras de validação exceto a verificação de autorização no serviço de terceiros.
 
 #### **Controller User**
-Controller que representa as chamadas referente aos users. Nos modules commom e nodbt funciona exatamente igual, trazendo todos os dados sem a necessidade de autenticação, já no module security é necessário um token e o usuário do token só pode ver os valores de sua propria wallet.
+Controller que representa as chamadas referente aos users. Nos modules common e nodbt funciona exatamente igual, trazendo todos os dados sem a necessidade de autenticação, já no module security é necessário um token e o usuário do token só pode ver os valores de sua propria wallet.
 
 #### **Controller Transaction**
-Controller que representa as chamadas referente as transactions. No module commom e nodbt as chamadas gets (list e view) trazem todos os valores sem nenhum critério.
+Controller que representa as chamadas referente as transactions. No module common e nodbt as chamadas gets (list e view) trazem todos os valores sem nenhum critério.
 
 No module security as chamadas gets (list e view) é necessário o envio do token para autenticação do usuário. Todos os campos são retornados, porém o campo value só é retornado quando o usuário participa da transação. 
 
 
-No module commom e security a chamada post (create) precisa dos dados descritos na documentação da api e caso ocorra uma inconsistência, a transaction não é realizada por causa do rollback. A diferença entre o commom e security é que no security o payer é sempre o usuário autenticado. No module nodbt é parecido com o do module commom a diferença é que não tem rollback e a reversão é feita a partir de modificações na wallet.
+No module common e security a chamada post (create) precisa dos dados descritos na documentação da api e caso ocorra uma inconsistência, a transaction não é realizada por causa do rollback. A diferença entre o common e security é que no security o payer é sempre o usuário autenticado. No module nodbt é parecido com o do module common a diferença é que não tem rollback e a reversão é feita a partir de modificações na wallet.
 
-#### Controller NoAuth
+#### **Controller NoAuth**
 Possui apenas a função para realizar o login, recebendo um token JWT para utilizar nas outras chamadas.
 
-#### Controller NoSecurity
-É uma classe padrao para ser extendida por controllers que não necessitaram de autenticação poder extender da mesma.
+#### **Controller NoSecurity**
+É uma classe padrão para ser extendida por controllers que não necessitam de autenticação.
 
-#### Controller Security
-É uma classe padrao para ser extendida por controllers que necessitaram de autenticação.
-##### Dados 
+#### **Controller Security**
+É uma classe padrão para ser extendida por controllers que necessitam de autenticação.
+#### **Dados** 
 Como não foi criado a api para cadastro de usuários, foi criado um migration para popular o banco com usuários para fins de teste.
 
 Os usuários seguem a nomeclatura user1@apiprocesso.teste ... até user5@apiprocesso.teste os 3 primeiros são usuários comuns e os 2 últimos são usuarios lojistas.
